@@ -3,9 +3,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
+
 import java.util.ArrayList;
 
 import java.io.*;
+
+import java.net.URL;
 
 import javax.imageio.*;
 
@@ -42,6 +45,15 @@ public class EscalacaoApp {
         frame.setSize(800, 850); // Define o tamanho da janela
         frame.setResizable(false); // Impede que a janela seja maximizada
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Adicione o código aqui para definir o ícone
+        try {
+            Image iconeTitulo =
+                ImageIO.read(new File("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EscalacaoApp\\lib\\img\\icon.png"));
+            frame.setIconImage(iconeTitulo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
             backgroundImage =
@@ -88,14 +100,19 @@ public class EscalacaoApp {
                                    { 320, 320 }, // MC 1
                                    { 180, 320 }, // MC 2
                                    { 250, 180 }, // MEI
-                                   { 40, 70 }, // PD
+                                   { 450, 70 }, // PD
                                    { 250, 40 }, // ATA
-                                   { 450, 70 }, // PE
+                                   { 40, 70 }, // PE
                                    { 650, 660 } // Técnico
+
+
+
+
+
                 };
 
                 final java.util.List<Integer> pontuacoes = new java.util.ArrayList<>();
-                    
+
                 for (int i = 0; i < 12; i++) {
                     final int index = i;
                     final int[][] finalCoords = coords;
@@ -106,7 +123,7 @@ public class EscalacaoApp {
                             // Cria uma nova janela para inserir os dados do jogador
                             final JButton clickedButton = (JButton) e.getSource();
                             final JDialog dialog = new JDialog(frame, "Dados do Jogador", true);
-                            dialog.setLayout(new GridLayout(6, 1)); // Aumente o número de linhas para acomodar o botão de reset
+                            dialog.setLayout(new GridLayout(6, 1));
                             dialog.add(new JLabel("Nome do Jogador"));
                             final JTextField nomeField = new JTextField();
                             dialog.add(nomeField);
@@ -125,8 +142,12 @@ public class EscalacaoApp {
                                         imagemLabel.setText(selectedFile.getName());
                                         try {
                                             Image img = ImageIO.read(selectedFile);
-                                            Image scaledImg = img.getScaledInstance(clickedButton.getWidth(), clickedButton.getHeight(), Image.SCALE_SMOOTH);
-                                            BufferedImage resizedImg = new BufferedImage(clickedButton.getWidth(), clickedButton.getHeight(), BufferedImage.TYPE_INT_ARGB);
+                                            Image scaledImg =
+                                                img.getScaledInstance(clickedButton.getWidth(),
+                                                                      clickedButton.getHeight(), Image.SCALE_SMOOTH);
+                                            BufferedImage resizedImg =
+                                                new BufferedImage(clickedButton.getWidth(), clickedButton.getHeight(),
+                                                                  BufferedImage.TYPE_INT_ARGB);
                                             Graphics2D g2 = resizedImg.createGraphics();
                                             g2.drawImage(scaledImg, 0, 0, null);
                                             g2.dispose();
@@ -142,7 +163,9 @@ public class EscalacaoApp {
                             okButton.addActionListener(new ActionListener() {
                                 public void actionPerformed(ActionEvent e) {
                                     // Atualiza o botão na formação com os dados inseridos pelo usuário
-                                    JLabel label = new JLabel("<html>" + nomeField.getText() + "<br>" + pontuacaoField.getText() + "</html>", SwingConstants.CENTER);
+                                    JLabel label =
+                                        new JLabel("<html>" + nomeField.getText() + "<br>" + pontuacaoField.getText() +
+                                                   "</html>", SwingConstants.CENTER);
                                     label.setForeground(Color.WHITE);
                                     clickedButton.add(label, BorderLayout.SOUTH);
                                     clickedButton.repaint();
@@ -190,7 +213,7 @@ public class EscalacaoApp {
                             dialog.setVisible(true);
                         }
                     });
-                    
+
                     posicoes[index].setBounds(finalCoords[index][0], finalCoords[index][1], 100, 130);
                     panel2.add(posicoes[index]);
                     posicoes[index].setOpaque(false);
