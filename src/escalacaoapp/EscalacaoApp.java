@@ -105,10 +105,6 @@ public class EscalacaoApp {
                                    { 40, 70 }, // PE
                                    { 650, 660 } // Técnico
 
-
-
-
-
                 };
 
                 final java.util.List<Integer> pontuacoes = new java.util.ArrayList<>();
