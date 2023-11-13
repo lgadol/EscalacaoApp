@@ -17,8 +17,25 @@ public class EscalacaoApp {
     private JPanel panel1, panel2;
     private JButton avancarButton;
     private JButton[] posicoes;
-    private String[] nomes = {
+    private String[] formacao_433P = {
         "GOL", "LD", "ZAG 1", "ZAG 2", "LE", "MC 1", "MC 2", "MEI", "PD", "ATA", "PE", "Técnico" };
+    private String[] formacao_433_O = {
+        "GOL", "LD", "ZAG 1", "ZAG 2", "LE", "MC 1", "MC 2", "MEI", "PD", "ATA", "PE", "Técnico" };
+    private String[] formacao_442 = {
+        "GOL", "LD", "ZAG 1", "ZAG 2", "LE", "MC 1", "MC 2", "MEI", "PD", "ATA", "PE", "Técnico" };
+    private String[] formacao_532 = {
+        "GOL", "LD", "ZAG 1", "ZAG 2", "LE", "MC 1", "MC 2", "MEI", "PD", "ATA", "PE", "Técnico" };
+    private String[] formacao_4231 = {
+        "GOL", "LD", "ZAG 1", "ZAG 2", "LE", "MC 1", "MC 2", "MEI", "PD", "ATA", "PE", "Técnico" };
+    private String[] formacao_424 = {
+        "GOL", "LD", "ZAG 1", "ZAG 2", "LE", "MC 1", "MC 2", "MEI", "PD", "ATA", "PE", "Técnico" };
+    private String[] formacao_352 = {
+        "GOL", "LD", "ZAG 1", "ZAG 2", "LE", "MC 1", "MC 2", "MEI", "PD", "ATA", "PE", "Técnico" };
+    private String[] formacao_451 = {
+        "GOL", "LD", "ZAG 1", "ZAG 2", "LE", "MC 1", "MC 2", "MEI", "PD", "ATA", "PE", "Técnico" };
+    private String[] formacao_235 = {
+        "GOL", "LD", "ZAG 1", "ZAG 2", "LE", "MC 1", "MC 2", "MEI", "PD", "ATA", "PE", "Técnico" };
+    
     private Image backgroundImage;
     ArrayList<String> nomesJogadores = new ArrayList<String>();
     ArrayList<String> pontuacoesJogadores = new ArrayList<String>();
@@ -112,7 +129,7 @@ public class EscalacaoApp {
                 for (int i = 0; i < 12; i++) {
                     final int index = i;
                     final int[][] finalCoords = coords;
-                    posicoes[index] = new JButton(nomes[index]);
+                    posicoes[index] = new JButton(formacao_433P[index]);
                     posicoes[index].setLayout(new BorderLayout());
                     posicoes[index].addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
