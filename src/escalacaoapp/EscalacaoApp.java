@@ -19,8 +19,8 @@ public class EscalacaoApp {
     private JButton[] posicoes;
     private Image backgroundImage;
     private Time time;
-    private String[] formacaoAtual = Formacao.FORMACAO_433P; // A formação atual
-    private int[][] coordsAtual = Formacao.COORDS_433; // As coordenadas da formação atual
+    private String[] formacaoAtual = Formacao.FORMACAO_433P;
+    private int[][] coordsAtual = Formacao.COORDS_433P;
     private JLabel mediaLabel;
 
     public static void main(String[] args) {
@@ -92,22 +92,25 @@ public class EscalacaoApp {
                 panel2.add(mediaLabel);
 
                 // Crie um JComboBox com todas as formações disponíveis
-                String[] formacoes = { "4-3-3P", "4-3-3O" /*, outras formações aqui */ };
+                String[] formacoes = { "4-3-3 P", "4-3-3 O", "4-4-2" };
                 final JComboBox<String> formacaoComboBox = new JComboBox<>(formacoes);
                 formacaoComboBox.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         String formacaoSelecionada = (String) formacaoComboBox.getSelectedItem();
                         // Atualize a formação e as coordenadas atuais com base na formação selecionada
                         switch (formacaoSelecionada) {
-                        case "4-3-3P":
+                        case "4-3-3 P":
                             formacaoAtual = Formacao.FORMACAO_433P;
-                            coordsAtual = Formacao.COORDS_433;
+                            coordsAtual = Formacao.COORDS_433P;
                             break;
-                        case "4-3-3O":
+                        case "4-3-3 O":
                             formacaoAtual = Formacao.FORMACAO_433O;
-                            coordsAtual = Formacao.COORDS_433;
+                            coordsAtual = Formacao.COORDS_433O;
                             break;
-                            // Adicione mais casos aqui para outras formações
+                        case "4-4-2":
+                            formacaoAtual = Formacao.FORMACAO_442;
+                            coordsAtual = Formacao.COORDS_442;
+                            break;
                         }
                         // Atualize os botões de posição com a nova formação e coordenadas
                         atualizarBotoesPosicao(formacaoAtual, coordsAtual);
@@ -157,6 +160,18 @@ public class EscalacaoApp {
                             if (returnValue == JFileChooser.APPROVE_OPTION) {
                                 File selectedFile = fileChooser.getSelectedFile();
                                 imagemLabel.setText(selectedFile.getName());
+
+                                // Aqui é onde nós pegamos o nome do arquivo e dividimos em nome e pontuação
+                                String fileName = selectedFile.getName();
+                                if (fileName.contains(".")) { // Verifica se o nome do arquivo contém um ponto
+                                    String[] parts =
+                                        fileName.split("\\."); // Note que precisamos escapar o ponto porque é um caractere especial em expressões regulares
+                                    if (parts.length >= 2) {
+                                        nomeField.setText(parts[0]);
+                                        pontuacaoField.setText(parts[1]);
+                                    }
+                                }
+
                                 try {
                                     Image img = ImageIO.read(selectedFile);
                                     Image scaledImg =
@@ -175,6 +190,7 @@ public class EscalacaoApp {
                             }
                         }
                     });
+
                     dialog.add(imagemButton);
                     JButton okButton = new JButton("OK");
                     okButton.addActionListener(new ActionListener() {
@@ -201,6 +217,7 @@ public class EscalacaoApp {
                         }
                     });
                     dialog.add(okButton);
+                    
                     JButton resetButton = new JButton("Resetar");
                     resetButton.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
