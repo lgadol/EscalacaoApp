@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
+
 import java.io.*;
 
 import javax.imageio.ImageIO;
@@ -72,7 +73,7 @@ public class EscalacaoApp {
         panel1.add(avancarButton);
 
         avancarButton.addActionListener(new ActionListener() {
-            
+
             public void actionPerformed(ActionEvent e) {
                 frame.remove(panel1);
                 panel2 = new JPanel() {
@@ -82,7 +83,7 @@ public class EscalacaoApp {
                         g.drawImage(backgroundImage, 0, 0, null);
                     }
                 };
-                
+
                 // Média de pontuação do time
                 frame.getContentPane().add(panel2, BorderLayout.CENTER);
                 panel2.setLayout(null);
@@ -91,38 +92,53 @@ public class EscalacaoApp {
                 panel2.add(mediaLabel);
 
                 // Crie um JComboBox com todas as formações disponíveis
-                String[] formacoes = { "4-3-3 P", "4-3-3 O", "4-4-2" };
+                String[] formacoes = { "4-3-3 P", "4-3-3 O", "4-4-2", "5-3-2", "3-4-3", "3-5-2" };
                 final JComboBox<String> formacaoComboBox = new JComboBox<>(formacoes);
                 formacaoComboBox.addActionListener(new ActionListener() {
-                    
+
                     public void actionPerformed(ActionEvent e) {
                         String formacaoSelecionada = (String) formacaoComboBox.getSelectedItem();
-                        
+
                         // Atualize a formação e as coordenadas atuais com base na formação selecionada
                         switch (formacaoSelecionada) {
-                        
+
                         case "4-3-3 P":
                             formacaoAtual = Formacao.FORMACAO_433P;
                             coordsAtual = Formacao.COORDS_433P;
                             break;
-                        
+
                         case "4-3-3 O":
                             formacaoAtual = Formacao.FORMACAO_433O;
                             coordsAtual = Formacao.COORDS_433O;
                             break;
-                        
+
                         case "4-4-2":
                             formacaoAtual = Formacao.FORMACAO_442;
                             coordsAtual = Formacao.COORDS_442;
                             break;
-                        
+
+                        case "5-3-2":
+                            formacaoAtual = Formacao.FORMACAO_532;
+                            coordsAtual = Formacao.COORDS_532;
+                            break;
+
+                        case "3-4-3":
+                            formacaoAtual = Formacao.FORMACAO_343;
+                            coordsAtual = Formacao.COORDS_343;
+                            break;
+
+                        case "3-5-2":
+                            formacaoAtual = Formacao.FORMACAO_352;
+                            coordsAtual = Formacao.COORDS_352;
+                            break;
+
                         }
-                        
+
                         // Atualize os botões de posição com a nova formação e coordenadas
                         atualizarBotoesPosicao(formacaoAtual, coordsAtual);
                     }
                 });
-                
+
                 formacaoComboBox.setBounds(650, 10, 100, 20); // Posicione o JComboBox no canto superior direito
                 panel2.add(formacaoComboBox);
 
@@ -139,51 +155,57 @@ public class EscalacaoApp {
     }
 
     private void criarBotoesPosicao() {
-        
+
         // Crie os botões de posição apenas uma vez
         posicoes = new JButton[12];
-        
+
         for (int i = 0; i < 12; i++) {
-            
+
             final int index = i;
+            final JTextField nomeField = new JTextField();
+            final JTextField pontuacaoField = new JTextField();
+
             posicoes[index] = new JButton();
             posicoes[index].setLayout(new BorderLayout());
             posicoes[index].addActionListener(new ActionListener() {
-                
+
                 public void actionPerformed(ActionEvent e) {
-                    
+
                     // Cria uma nova janela para inserir os dados do jogador
                     final JButton clickedButton = (JButton) e.getSource();
                     final JDialog dialog = new JDialog(frame, "Dados do Jogador", true);
                     dialog.setLayout(new GridLayout(6, 1));
-                    
+
                     dialog.add(new JLabel("Nome do Jogador"));
-                    final JTextField nomeField = new JTextField();
                     dialog.add(nomeField);
-                    
+
                     dialog.add(new JLabel("Pontuação do Jogador"));
-                    final JTextField pontuacaoField = new JTextField();
                     dialog.add(pontuacaoField);
-                    
+
+                    // Se o botão já tem um jogador associado, preencha os campos de texto com os dados desse jogador
+                    Jogador jogador = time.getFormacao().getJogador(index);
+                    if (jogador != null) {
+                        nomeField.setText(jogador.getNome());
+                        pontuacaoField.setText(String.valueOf(jogador.getPontuacao()));
+                    }
+
                     final JLabel imagemLabel = new JLabel();
                     JButton imagemButton = new JButton("Selecionar Imagem");
                     imagemButton.addActionListener(new ActionListener() {
-                        
                         public void actionPerformed(ActionEvent e) {
-                            
                             // Abre um seletor de arquivos para o usuário escolher a imagem do jogador
                             JFileChooser fileChooser = new JFileChooser();
                             int returnValue = fileChooser.showOpenDialog(null);
                             if (returnValue == JFileChooser.APPROVE_OPTION) {
-                                
                                 File selectedFile = fileChooser.getSelectedFile();
                                 imagemLabel.setText(selectedFile.getName());
 
                                 // Aqui é onde nós pegamos o nome do arquivo e dividimos em nome e pontuação
                                 String fileName = selectedFile.getName();
-                                if (fileName.contains(".")) { // Verifica se o nome do arquivo contém um ponto
-                                    String[] parts =
-                                        fileName.split("\\."); // Note que precisamos escapar o ponto porque é um caractere especial em expressões regulares
+                                if (fileName.contains(".")) {
+                                    // Verifica se o nome do arquivo contém um ponto
+                                    String[] parts = fileName.split("\\.");
+                                    // Note que precisamos escapar o ponto porque é um caractere especial em expressões regulares
                                     if (parts.length >= 2) {
                                         nomeField.setText(parts[0]);
                                         pontuacaoField.setText(parts[1]);
@@ -210,26 +232,29 @@ public class EscalacaoApp {
                     });
 
                     dialog.add(imagemButton);
-                    
+
                     JButton okButton = new JButton("OK");
                     okButton.addActionListener(new ActionListener() {
-                        
                         public void actionPerformed(ActionEvent e) {
-                            
                             // Atualiza o botão na formação com os dados inseridos pelo usuário
                             JLabel label =
                                 new JLabel("<html>" + nomeField.getText() + "<br>" + pontuacaoField.getText() +
                                            "</html>", SwingConstants.CENTER);
                             label.setForeground(Color.WHITE);
+
+                            // Limpa o conteúdo do botão antes de adicionar o novo JLabel
+                            clickedButton.removeAll();
                             clickedButton.add(label, BorderLayout.SOUTH);
                             clickedButton.repaint();
                             dialog.dispose();
-                            
+
                             // Adiciona o jogador à formação
-                            Jogador jogador =
-                                new Jogador(nomeField.getText(), Integer.parseInt(pontuacaoField.getText()));
+                            // Verifica se o campo de pontuação está vazio antes de tentar analisá-lo
+                            int pontuacao =
+                                pontuacaoField.getText().isEmpty() ? 0 : Integer.parseInt(pontuacaoField.getText());
+                            Jogador jogador = new Jogador(nomeField.getText(), pontuacao);
                             time.getFormacao().adicionarJogador(jogador);
-                            
+
                             // Calcula a média
                             double soma = 0.0;
                             for (Jogador jog : time.getFormacao().getJogadores()) {
@@ -239,19 +264,18 @@ public class EscalacaoApp {
                             mediaLabel.setText(String.format("Média geral do time: %.2f", media));
                         }
                     });
+
                     dialog.add(okButton);
-                    
+
                     JButton resetButton = new JButton("Resetar");
                     resetButton.addActionListener(new ActionListener() {
-                        
                         public void actionPerformed(ActionEvent e) {
-                            
                             // Limpa os campos de texto
                             nomeField.setText("");
                             pontuacaoField.setText("");
                             imagemLabel.setText("");
                             clickedButton.setIcon(null);
-                            
+
                             // Remove o jogador da formação
                             Jogador jogador = time.getFormacao().getJogador(index);
                             if (jogador != null) {
@@ -259,6 +283,7 @@ public class EscalacaoApp {
                             }
                         }
                     });
+
                     dialog.add(resetButton);
                     dialog.pack();
                     dialog.setVisible(true);
@@ -271,7 +296,7 @@ public class EscalacaoApp {
     }
 
     private void atualizarBotoesPosicao(String[] formacao, int[][] coords) {
-        
+
         // Atualize o texto e a posição dos botões de posição existentes
         for (int i = 0; i < 12; i++) {
             posicoes[i].setText(formacao[i]);
