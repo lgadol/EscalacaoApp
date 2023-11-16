@@ -44,10 +44,11 @@ public class EscalacaoApp {
         frame.setSize(800, 850); // Define o tamanho da janela
         frame.setResizable(false); // Impede que a janela seja maximizada
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Adicione o código aqui para definir o ícone
+        frame.setLocationRelativeTo(null);  // Isto centraliza a janela
 
         try {
             Image iconeTitulo =
-                ImageIO.read(new File("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EscalacaoApp\\lib\\img\\icon.png"));
+                ImageIO.read(new File("C:\\Users\\PedroGado\\Documents\\Java Dev\\My Dev\\EscalacaoApp\\lib\\img\\icon.ico"));
             frame.setIconImage(iconeTitulo);
         } catch (IOException e) {
             e.printStackTrace();
@@ -181,6 +182,8 @@ public class EscalacaoApp {
 
                     dialog.add(new JLabel("Pontuação do Jogador"));
                     dialog.add(pontuacaoField);
+                    
+                    dialog.setLocationRelativeTo(null);  // Isto centraliza a janela
 
                     // Se o botão já tem um jogador associado, preencha os campos de texto com os dados desse jogador
                     Jogador jogador = time.getFormacao().getJogador(index);
